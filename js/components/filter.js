@@ -77,7 +77,7 @@ Vue.component('filter-component', {
         <br/>
         <div class="form-group form-check-inline" v-for="(tag, index) in tags">
             <input type="checkbox" class="form-check-input" v-bind:id="'tag' + index" v-on:click="changeTags(index)">
-            <label class="form-check-label" v-bind:for="tag">{{ tag }}</label>
+            <label class="form-check-label" v-bind:for="'tag' + index">{{ tag }}</label>
         </div>
     </template>
     
