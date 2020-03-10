@@ -64,7 +64,7 @@ Vue.component('filter-component', {
         }
     },
     template: `
-<form class="mt-3">
+<form class="mt-3" onsubmit="return false">
     <div class="form-group">
         <label for="searchTextBox" class="font-weight-bold">Keywords:</label>
         <input type="text" class="form-control" id="searchTextBox" aria-describedby="searchHelp"
