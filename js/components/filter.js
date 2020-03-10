@@ -21,10 +21,10 @@ Vue.component('filter-component', {
             this.sortedBy = column;
             // console.log(column);
         },
-        changeTags: function (tag) {
+        changeTags: function (tagIndex) {
             this.checkedTags = [];
-            this.tags.forEach(function (tag) {
-                if ($("#" + tag).prop("checked")) {
+            this.tags.forEach(function (tag, index) {
+                if ($("#tag" + index).prop("checked")) {
                     if (this.checkedTags.indexOf(tag) < 0) {
                         this.checkedTags.push(tag);
                     }
@@ -75,8 +75,8 @@ Vue.component('filter-component', {
     <template v-if="tags.length > 0">
         <label class="font-weight-bold">Tags:</label>
         <br/>
-        <div class="form-group form-check-inline" v-for="tag in tags">
-            <input type="checkbox" class="form-check-input" v-bind:id="tag" v-on:click="changeTags(tag)">
+        <div class="form-group form-check-inline" v-for="(tag, index) in tags">
+            <input type="checkbox" class="form-check-input" v-bind:id="'tag' + index" v-on:click="changeTags(index)">
             <label class="form-check-label" v-bind:for="tag">{{ tag }}</label>
         </div>
     </template>
