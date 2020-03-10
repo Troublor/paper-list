@@ -87,8 +87,9 @@ Vue.component('filter-component', {
     <div class="d-inline mr-3">Sorted by: </div>
     <div class="btn-group" role="group" aria-label="sortBy">
         <button type="button" v-bind:class="['btn', 'btn-sm', sortedBy === 'title'? 'btn-primary' : 'btn-outline-primary']" v-on:click="changeSortedBy('title')">Title</button>
-        <button type="button" v-bind:class="['btn', 'btn-sm', sortedBy === 'conference'? 'btn-primary' : 'btn-outline-primary']" v-on:click="changeSortedBy('conference')">Conference</button>
+        <button type="button" v-bind:class="['btn', 'btn-sm', sortedBy === 'venue'? 'btn-primary' : 'btn-outline-primary']" v-on:click="changeSortedBy('venue')">Venue</button>
         <button type="button" v-bind:class="['btn', 'btn-sm', sortedBy === 'author'? 'btn-primary' : 'btn-outline-primary']" v-on:click="changeSortedBy('author')">Author</button>
+        <button type="button" v-bind:class="['btn', 'btn-sm', sortedBy === 'year'? 'btn-primary' : 'btn-outline-primary']" v-on:click="changeSortedBy('year')">Year</button>
         <button type="button" v-bind:class="['btn', 'btn-sm', sortedBy === 'similarity'? 'btn-primary' : 'btn-outline-primary']" v-on:click="changeSortedBy('similarity')" v-if="hasKws">Similarity</button>
     </div>
     <div class="ml-3 form-check-inline align-middle">

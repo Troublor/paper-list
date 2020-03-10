@@ -4,6 +4,7 @@ Vue.component('entry', {
         'link',
         'authors',
         'venue',
+        'year',
         'keywords',
         'serializedTags'
     ],
@@ -23,6 +24,10 @@ Vue.component('entry', {
             let reg = new RegExp("(" + this.keywords.join("|") + ")", "gi");
             return this.venue.replace(reg, "<span style='background-color: #8ca0f754'>$1</span>");
         },
+        "hYear": function () {
+            let reg = new RegExp("(" + this.keywords.join("|") + ")", "gi");
+            return this.year.replace(reg, "<span style='background-color: #8ca0f754'>$1</span>");
+        }
     },
     template: `
 <div class="text-left">
@@ -32,7 +37,7 @@ Vue.component('entry', {
     </div>
     <ul>
         <li v-html="hAuthors"></li>
-        <li v-html="hVenue"></li>
+        <li><span v-html="hVenue"></span>&nbsp;<span v-html="hYear"></span></li>
         <p>
             <span class="badge badge-primary" v-for="tag in tags">{{ tag }}</span>
         </p>

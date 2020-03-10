@@ -34,7 +34,7 @@ Vue.component('list', {
     methods: {
         calculateSimilarity: function (entry, kws) {
             let sim = 0;
-            let items = entry.title.split(/\s+/).concat(entry.authors);
+            let items = entry.title.split(/\s+/).concat(entry.authors).concat(entry.year);
             let index = [];
             for (let j = 0; j < kws.length; j++) {
                 index.push([]);
@@ -104,7 +104,7 @@ Vue.component('list', {
                     } else {
                         return a.title < b.title ? -1 : 1;
                     }
-                } else if (sortedBy === 'conference') {
+                } else if (sortedBy === 'venue') {
                     if (vue.reverse) {
                         return a.venue > b.venue ? -1 : 1;
                     } else {
@@ -115,6 +115,13 @@ Vue.component('list', {
                         return a.authors.join(' ') > b.authors.join(' ') ? -1 : 1;
                     } else {
                         return a.authors.join(' ') < b.authors.join(' ') ? -1 : 1;
+                    }
+                } else if (sortedBy === 'year') {
+                    // year is sort from latest to oldest by default
+                    if (vue.reverse) {
+                        return parseInt(a.year) < parseInt(b.year) ? -1 : 1;
+                    } else {
+                        return parseInt(a.year) > parseInt(b.year) ? -1 : 1;
                     }
                 } else if (sortedBy === 'similarity') {
                     if (vue.reverse) {
@@ -155,7 +162,7 @@ Vue.component('list', {
             <template v-if="!empty">
                 <tr v-for="(entry, index) in visibleList">
                     <td>
-                        <entry v-bind:keywords="kws" v-bind:title="entry.title" v-bind:link="entry.link" v-bind:authors="entry.authors.join(', ')" v-bind:venue="entry.venue" v-bind:serializedTags="serializeTags(entry.tags)"></entry>
+                        <entry v-bind:keywords="kws" v-bind:title="entry.title" v-bind:link="entry.link" v-bind:authors="entry.authors.join(', ')" v-bind:venue="entry.venue" v-bind:year="entry.year" v-bind:serializedTags="serializeTags(entry.tags)"></entry>
                     </td>
                 </tr>
             </template>
