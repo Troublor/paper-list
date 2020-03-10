@@ -7,6 +7,7 @@ const paper_list = [
             "Author2",
         ],
         "venue": "Venue",
+        "year": "year",
         "tags": [
             "Tag1",
             "Tag2",
