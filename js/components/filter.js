@@ -68,7 +68,7 @@ Vue.component('filter-component', {
     <div class="form-group">
         <label for="searchTextBox" class="font-weight-bold">Keywords:</label>
         <input type="text" class="form-control" id="searchTextBox" aria-describedby="searchHelp"
-               placeholder="Search Paper..." v-model="searchPayload">
+               placeholder="Search Paper by Keyword in Title, Conference, Author" v-model="searchPayload">
         <small id="searchHelp" class="form-text text-muted">Search papers by keywords. Keywords should be
             separated by blank space.</small>
     </div>
