@@ -20,9 +20,14 @@
 <div id="app">
     <div class="container">
         <h2 class="mt-5">Paper List: </h2>
-        <filter-component class="mt-3" v-bind:tags='tags' v-on:tags="onChangeTags" v-on:keywords="onChangeKeywords"
+        <filter-component class="mt-3" v-bind:paper_tags='paper_tags' v-bind:venue_tags='venue_tags'
+                          v-bind:year_tags='year_tags' v-on:paper_tags="onChangePaperTags"
+                          v-on:venue_tags="onChangeVenueTags" v-on:year_tags="onChangeYearTags"
+                          v-on:keywords="onChangeKeywords"
                           v-on:sortedby="onChangeSortedBy" v-on:reverse="onReverse"></filter-component>
-        <list class="mt-3" v-bind:entry-list='paperList' v-bind:tags="checkedTags" v-bind:keywords="keywords"
+        <list class="mt-3" v-bind:entry-list='paperList' v-bind:checked_paper_tags="checked_paper_tags"
+              v-bind:checked_venue_tags="checked_venue_tags" v-bind:checked_year_tags="checked_year_tags"
+              v-bind:keywords="keywords"
               v-bind:sortedby="sortedBy" v-bind:reverse="reverse"></list>
     </div>
 </div>
@@ -32,8 +37,12 @@
         el: "#app",
         data: {
             paperList: [],
-            tags: [],
-            checkedTags: [],
+            paper_tags: [],
+            venue_tags: [],
+            year_tags: [],
+            checked_paper_tags: [],
+            checked_venue_tags: [],
+            checked_year_tags: [],
             keywords: [],
             sortedBy: "title",
             reverse: false,
@@ -44,19 +53,33 @@
                 data.forEach(function (entry) {
                     this.paperList.push(entry);
                     entry.tags.forEach(function (tag) {
-                        if (!this.tags.includes(tag)) {
-                            this.tags.push(tag);
+                        if (!this.paper_tags.includes(tag)) {
+                            this.paper_tags.push(tag);
                         }
                     }, this);
+                    if (!this.venue_tags.includes(entry.venue)) {
+                        this.venue_tags.push(entry.venue);
+                    }
+                    if (!this.year_tags.includes(entry.year)) {
+                        this.year_tags.push(entry.year);
+                    }
                 }, vue);
             };
             // $.getJSON("paper_list.json", processData);
             processData(paper_list);
-            vue.tags.sort();
+            vue.paper_tags.sort();
+            vue.venue_tags.sort();
+            vue.year_tags.sort();
         },
         methods: {
-            onChangeTags: function (tags) {
-                this.checkedTags = tags;
+            onChangePaperTags: function (tags) {
+                this.checked_paper_tags = tags;
+            },
+            onChangeVenueTags: function (tags) {
+                this.checked_venue_tags = tags;
+            },
+            onChangeYearTags: function (tags) {
+                this.checked_year_tags = tags;
             },
             onChangeKeywords: function (kws) {
                 this.keywords = kws;
@@ -84,5 +107,7 @@
     })
 
 </script>
-<script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=300&t=tt&d=mi7stn7z4wsoZ3l2ztG5-CFRDGoWUt5Z3EEv-tmGQwA"></script></body>
+<script type="text/javascript" id="clustrmaps"
+        src="//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=300&t=tt&d=mi7stn7z4wsoZ3l2ztG5-CFRDGoWUt5Z3EEv-tmGQwA"></script>
+</body>
 </html>
