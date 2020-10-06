@@ -114,7 +114,7 @@ Vue.component('list', {
                 for (let i = 0; i < tmp.length; i++) {
                     tmp[i].similarity = this.calculateSimilarity(tmp[i], this.kws);
                     if (tmp[i].similarity > 0) {
-                        tmp2.push(this.tmp[i]);
+                        tmp2.push(tmp[i]);
                     }
                 }
                 tmp = Array.from(tmp2)
