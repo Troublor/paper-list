@@ -1,11 +1,13 @@
 Vue.component('filter-component', {
     props: [
-        "tags",
+        "paper_tags",
+        "venue_tags",
+        "year_tags"
     ],
     data: function () {
         return {
             "sortedBy": "title",
-            "checkedTags": [],
+            "checked_paper_tags": [],
             "searchPayload": "",
             "reverse": false,
         }
@@ -21,19 +23,49 @@ Vue.component('filter-component', {
             this.sortedBy = column;
             // console.log(column);
         },
-        changeTags: function (tagIndex) {
-            this.checkedTags = [];
-            this.tags.forEach(function (tag, index) {
-                if ($("#tag" + index).prop("checked")) {
-                    if (this.checkedTags.indexOf(tag) < 0) {
-                        this.checkedTags.push(tag);
+        changeVenueTags: function (tagIndex) {
+            this.checked_venue_tags = [];
+            this.venue_tags.forEach(function (tag, index) {
+                if ($("#venue_tag" + index).prop("checked")) {
+                    if (this.checked_venue_tags.indexOf(tag) < 0) {
+                        this.checked_venue_tags.push(tag);
                     }
                 }
             }, this);
-            if (this.checkedTags.length === 0) {
-                alert("All tags are removed: showing everything.")
-            }
-            this.$emit("tags", this.checkedTags);
+            // if (this.checked_venue_tags.length === 0) {
+            //     alert("All Tags are removed: showing everything.")
+            // }
+            this.$emit("venue_tags", this.checked_venue_tags);
+            // console.log(this.checkedTags)
+        },
+        changeYearTags: function (tagIndex) {
+            this.checked_year_tags = [];
+            this.year_tags.forEach(function (tag, index) {
+                if ($("#year_tag" + index).prop("checked")) {
+                    if (this.checked_year_tags.indexOf(tag) < 0) {
+                        this.checked_year_tags.push(tag);
+                    }
+                }
+            }, this);
+            // if (this.checked_year_tags.length === 0) {
+            //     alert("All Tags are removed: showing everything.")
+            // }
+            this.$emit("year_tags", this.checked_year_tags);
+            // console.log(this.checkedTags)
+        },
+        changePaperTags: function (tagIndex) {
+            this.checked_paper_tags = [];
+            this.paper_tags.forEach(function (tag, index) {
+                if ($("#paper_tag" + index).prop("checked")) {
+                    if (this.checked_paper_tags.indexOf(tag) < 0) {
+                        this.checked_paper_tags.push(tag);
+                    }
+                }
+            }, this);
+            // if (this.checked_paper_tags.length === 0) {
+            //     alert("All Tags are removed: showing everything.")
+            // }
+            this.$emit("paper_tags", this.checked_paper_tags);
             // console.log(this.checkedTags)
         },
         escapeRegExp: function (string) {
@@ -68,16 +100,34 @@ Vue.component('filter-component', {
     <div class="form-group">
         <label for="searchTextBox" class="font-weight-bold">Keywords:</label>
         <input type="text" class="form-control" id="searchTextBox" aria-describedby="searchHelp"
-               placeholder="Search Paper by Keyword in Title, Conference, Author" v-model="searchPayload">
+               placeholder="Search Paper by Keyword in Title and Author" v-model="searchPayload">
         <small id="searchHelp" class="form-text text-muted">Search papers by keywords. Keywords should be
             separated by blank space.</small>
     </div>
-    <template v-if="tags.length > 0">
+    <template v-if="venue_tags.length > 0">
+        <label class="font-weight-bold">Venue:</label>
+        <br/>
+        <div class="form-group form-check-inline" v-for="(tag, index) in venue_tags">
+            <input type="checkbox" class="form-check-input" v-bind:id="'venue_tag' + index" v-on:click="changeVenueTags(index)">
+            <label class="form-check-label" v-bind:for="'venue_tag' + index">{{ tag }}</label>
+        </div>
+        <br/>
+    </template>
+    <template v-if="year_tags.length > 0">
+        <label class="font-weight-bold">Year:</label>
+        <br/>
+        <div class="form-group form-check-inline" v-for="(tag, index) in year_tags">
+            <input type="checkbox" class="form-check-input" v-bind:id="'year_tag' + index" v-on:click="changeYearTags(index)">
+            <label class="form-check-label" v-bind:for="'year_tag' + index">{{ tag }}</label>
+        </div>
+        <br/>
+    </template>
+    <template v-if="paper_tags.length > 0">
         <label class="font-weight-bold">Tags:</label>
         <br/>
-        <div class="form-group form-check-inline" v-for="(tag, index) in tags">
-            <input type="checkbox" class="form-check-input" v-bind:id="'tag' + index" v-on:click="changeTags(index)">
-            <label class="form-check-label" v-bind:for="'tag' + index">{{ tag }}</label>
+        <div class="form-group form-check-inline" v-for="(tag, index) in paper_tags">
+            <input type="checkbox" class="form-check-input" v-bind:id="'paper_tag' + index" v-on:click="changePaperTags(index)">
+            <label class="form-check-label" v-bind:for="'paper_tag' + index">{{ tag }}</label>
         </div>
     </template>
     

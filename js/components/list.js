@@ -1,7 +1,9 @@
 Vue.component('list', {
     props: [
         'keywords', //array
-        'tags', //array
+        'checked_paper_tags', //array
+        'checked_year_tags', //array
+        'checked_venue_tags', //array
         'entryList', // all entries
         'sortedby',
         'reverse',
@@ -19,10 +21,10 @@ Vue.component('list', {
             return this.visibleList.length === 0;
         },
         totalTags: function () {
-            if (this.tags === undefined) {
+            if (this.checked_paper_tags === undefined) {
                 return [];
             }
-            return this.tags;
+            return this.checked_paper_tags;
         },
         kws: function () {
             if (this.keywords === undefined) {
@@ -34,7 +36,8 @@ Vue.component('list', {
     methods: {
         calculateSimilarity: function (entry, kws) {
             let sim = 0;
-            let items = entry.title.split(/\s+/).concat(entry.authors).concat(entry.year).concat([entry.venue]);
+            let items = entry.title.split(/\s+/).concat(entry.authors);
+            // let items = entry.title.split(/\s+/).concat(entry.authors).concat(entry.year).concat([entry.venue]);
             let index = [];
             for (let j = 0; j < kws.length; j++) {
                 index.push([]);
@@ -70,30 +73,56 @@ Vue.component('list', {
             return sim;
         },
         loadList: function () {
-            let tmp = Array();
-            if (this.kws.length > 0) {
-                for (let i = 0; i < this.entryList.length; i++) {
-                    this.entryList[i].similarity = this.calculateSimilarity(this.entryList[i], this.kws);
-                    if (this.entryList[i].similarity > 0) {
-                        tmp.push(this.entryList[i]);
+            let tmp = Array.from(this.entryList);
+            let tmp2 = Array()
+            if (this.checked_venue_tags.length > 0){
+                tmp.forEach(function (item) {
+                    if (this.checked_venue_tags.includes(item.venue)) {
+                        tmp2.push(item);
                     }
-                }
-            } else {
-                tmp = Array.from(this.entryList);
+                }, this);
+                tmp = Array.from(tmp2)
+                tmp2 = Array()
             }
+
+            if (this.checked_year_tags.length > 0){
+                tmp.forEach(function (item) {
+                    if (this.checked_year_tags.includes(item.year)) {
+                        tmp2.push(item);
+                    }
+                }, this);
+                tmp = Array.from(tmp2)
+                tmp2 = Array()
+            }
+
             if (this.totalTags.length > 0) {
                 this.visibleList = [];
                 tmp.forEach(function (item) {
                     for (let i = 0; i < item.tags.length; i++) {
                         if (this.totalTags.includes(item.tags[i])) {
-                            this.visibleList.push(item);
+                            tmp2.push(item);
                             break;
                         }
                     }
                 }, this);
-            } else {
-                this.visibleList = Array.from(tmp);
+
+                tmp = Array.from(tmp2)
+                tmp2 = Array()
             }
+
+            if (this.kws.length > 0) {
+                for (let i = 0; i < tmp.length; i++) {
+                    tmp[i].similarity = this.calculateSimilarity(tmp[i], this.kws);
+                    if (tmp[i].similarity > 0) {
+                        tmp2.push(tmp[i]);
+                    }
+                }
+                tmp = Array.from(tmp2)
+                tmp2 = Array()
+            }
+
+            this.visibleList = Array.from(tmp);
+
 
             let vue = this;
             let sortedBy = this.sortedby;
@@ -141,7 +170,15 @@ Vue.component('list', {
             // WHERE筛选条件变化事件
             this.loadList();
         },
-        tags: function (val) {
+        checked_paper_tags: function (val) {
+            // ORDER BY条件变化事件
+            this.loadList();
+        },
+        checked_venue_tags: function (val) {
+            // ORDER BY条件变化事件
+            this.loadList();
+        },
+        checked_year_tags: function (val) {
             // ORDER BY条件变化事件
             this.loadList();
         },
