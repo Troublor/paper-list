@@ -26,7 +26,7 @@ Vue.component('entry', {
         },
         "hYear": function () {
             let reg = new RegExp("(" + this.keywords.join("|") + ")", "gi");
-            return this.year.replace(reg, "<span style='background-color: #8ca0f754'>$1</span>");
+            return this.year ? this.year.toString().replace(reg, "<span style='background-color: #8ca0f754'>$1</span>") : "";
         }
     },
     template: `
