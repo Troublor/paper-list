@@ -10,11 +10,11 @@ export interface LiteratureEntry {
     type: LiteratureType | null;
     title: string;
     authors: LiteratureAuthor[];
-    date: Date;
-    venue: string;
-    venueShort: string;
+    date: Date | null;
+    venue: string | null;
+    venueShort: string | null;
     tags: string[];
-    url: string;
+    url: string | null;
 }
 
 export type SortCriteria = 'title' | 'venue' | 'year' | 'author' | 'similarity';

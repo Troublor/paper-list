@@ -53,7 +53,7 @@ export default class MultiChoices extends React.Component<MultiChoicesProp, Mult
     }
 
     render() {
-        const choices = this.choices.map((choice) => <label className="form-check-label">
+        const choices = this.choices.map((choice) => <label className="form-check-label" key={`${this.props.name}-${choice}`}>
             <input type="checkbox" className="form-check-input me-1" name={choice} onChange={this.onChange}
                    checked={this.state.selected.includes(choice)}/>
             <span className="me-3">{choice}</span>

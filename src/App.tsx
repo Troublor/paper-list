@@ -5,10 +5,13 @@ import Container from "react-bootstrap/Container";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {LiteratureEntry} from "./types";
 import {library2json} from "./collectors/zotero";
+import {bibtex2entries} from "./collectors/bibtex";
 
 interface AppState {
     paperList: LiteratureEntry[]
     loading: boolean
+    title: string
+    description: string
 }
 
 export default class App extends React.Component<unknown, AppState> {
@@ -17,7 +20,8 @@ export default class App extends React.Component<unknown, AppState> {
     constructor(prop: unknown) {
         super(prop);
 
-        this.state = {paperList: [], loading: true}
+        // @ts-ignore
+        this.state = {paperList: [], loading: true, title: TITLE, description: DESCRIPTION}
 
         // load paper list based on settings.yml
         // @ts-ignore
@@ -32,8 +36,6 @@ export default class App extends React.Component<unknown, AppState> {
                 this.fetchPromise = library2json(zType, zId, zApiKey);
                 break;
             case "json":
-                // @ts-ignore
-                const jsonPath: string = JSON_PATH;
                 // @ts-ignore
                 const json: Record<string, unknown>[] = JSON_DATA;
                 this.fetchPromise = Promise.resolve(json.map((entry, index) => {
@@ -55,6 +57,11 @@ export default class App extends React.Component<unknown, AppState> {
                     } as LiteratureEntry
                 }));
                 break;
+            case "bibtex":
+                //@ts-ignore
+                const bibtex: string = BIBTEX_DATA;
+                this.fetchPromise = Promise.resolve(bibtex2entries(bibtex));
+                break;
             default:
                 this.fetchPromise = Promise.resolve([]);
         }
@@ -62,6 +69,7 @@ export default class App extends React.Component<unknown, AppState> {
 
     componentDidMount() {
         this.fetchPromise.then(r => this.setState({paperList: r, loading: false}));
+        document.title = this.state.title;
     }
 
     render() {
@@ -69,7 +77,9 @@ export default class App extends React.Component<unknown, AppState> {
             return <div>Loading data...</div>;
         } else {
             return <Container>
-                <h2 className="mt-5">Paper List: </h2>
+                <h1 className="mt-5">{this.state.title}</h1>
+                { this.state.description && <p>{this.state.description}</p>}
+                <hr/>
                 <Literatures entries={this.state.paperList}/>
             </Container>
         }

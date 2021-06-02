@@ -23,7 +23,7 @@ export default class Item extends React.Component<ItemProp, any> {
     }
 
     get year() {
-        return this.props.entry.date.getFullYear();
+        return this.props.entry.date ? this.props.entry.date.getFullYear() : "No Year";
     }
 
     get tags() {

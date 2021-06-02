@@ -74,9 +74,9 @@ function zoteroItem2Metadata(items: ZoteroItem[]): LiteratureEntry[] {
         if (item.data.conferenceName === '') item.data.conferenceName = undefined;
         if (item.data.proceedingsTitle === '') item.data.proceedingsTitle = undefined;
         if (item.data.publicationTitle === '') item.data.publicationTitle = undefined;
-        const venue = item.data.conferenceName ?? item.data.proceedingsTitle ?? item.data.publicationTitle ?? '';
+        const venue = item.data.conferenceName ?? item.data.proceedingsTitle ?? item.data.publicationTitle ?? null;
 
-        const date = new Date(item.data.date);
+        const date = item.data.date ? new Date(item.data.date) : null;
         let type: LiteratureType | null;
         switch (item.data.itemType) {
             case 'journalArticle':
@@ -92,10 +92,10 @@ function zoteroItem2Metadata(items: ZoteroItem[]): LiteratureEntry[] {
             id: item.data.key,
             type,
             title: item.data.title,
-            url: item.data.url,
+            url: item.data.url ?? null,
             authors: item.data.creators,
             venue,
-            venueShort: "",
+            venueShort: null,
             date,
             tags: item.data.tags.map(t => t.tag).filter(t=>t.toLowerCase() !== 'todo'),
         });
