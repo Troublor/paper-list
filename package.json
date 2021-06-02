@@ -1,9 +1,10 @@
 {
   "name": "paper-list",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "license": "MIT",
-  "homepage": "https://github.com/Troublor/paper-list",
+  "homepage": "/",
+  "repository": "https://github.com/Troublor/paper-list",
   "author": "Wuqi Aaron Zhang (@Troublor)",
   "bin": {
     "build-paper-list": "bin/build.js"
@@ -13,9 +14,9 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
+    "@types/lodash": "^4.14.170",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
-    "@types/lodash": "^4.14.170",
     "@types/react-dom": "^17.0.0",
     "@types/string-similarity": "^4.0.0",
     "axios": "^0.21.1",
