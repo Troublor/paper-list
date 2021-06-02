@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": false,
   "license": "MIT",
+  "homepage": "https://github.com/Troublor/paper-list",
+  "author": "Wuqi Aaron Zhang (@Troublor)",
   "bin": {
     "build-paper-list": "bin/build.js"
   },
