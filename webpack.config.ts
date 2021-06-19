@@ -5,6 +5,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import {TsconfigPathsPlugin} from 'tsconfig-paths-webpack-plugin';
 import fs from 'fs';
 import WatchExternalFilesPlugin from 'webpack-watch-files-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import InterpolateHtmlPlugin from 'interpolate-html-plugin';
 
 // eslint-disable-next-line require-jsdoc
 function loadData(source: string): Record<string, unknown>[] {
@@ -51,6 +53,7 @@ const webpackConfig = (env: {
   title?: string,
   description?: string,
   data?: string,
+  publicUrl?: string,
 }): Configuration => {
   env = Object.assign({
     production: true,
@@ -59,6 +62,7 @@ const webpackConfig = (env: {
     title: process.env.TITLE ?? 'Paper List',
     description: process.env.DESCRIPTION ?? '',
     data: process.env.DATA,
+    publicUrl: '',
   }, env);
   if (!env.data) {
     throw new Error('Must provide publication declaration data source');
@@ -105,6 +109,9 @@ const webpackConfig = (env: {
       new HtmlWebpackPlugin({
         template: 'public/index.html',
       }),
+      new InterpolateHtmlPlugin({
+        'PUBLIC_URL': env.publicUrl,
+      }),
       new webpack.DefinePlugin({
         'DATA': webpack.DefinePlugin.runtimeValue(
             ()=>JSON.stringify(loadData(env.data as string)), {
@@ -119,6 +126,13 @@ const webpackConfig = (env: {
           (percentage * 100).toFixed(2) + '% ' + msg);
       }),
       new WatchExternalFilesPlugin({files: [env.data]}),
+      new CopyPlugin({
+        patterns: [
+          {from: 'public', to: env.out, filter: (resource: string)=>
+            !resource.endsWith('index.html'),
+          },
+        ],
+      }),
       // new ForkTsCheckerWebpackPlugin({
       //   // eslint: {
       //   // eslint-disable-next-line max-len
