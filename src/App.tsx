@@ -1,87 +1,71 @@
 import React from 'react';
 import './App.css';
-import Literatures from "./Literatures";
-import Container from "react-bootstrap/Container";
+import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {LiteratureEntry} from "./types";
-import {library2json} from "./collectors/zotero";
-import {bibtex2entries} from "./collectors/bibtex";
+import {LiteratureAuthor, Literatures} from 'react-paper-list';
+import {LiteratureEntry} from 'react-paper-list';
 
 interface AppState {
-    paperList: LiteratureEntry[]
-    loading: boolean
-    title: string
-    description: string
+  paperList: LiteratureEntry[]
+  loading: boolean
+  title: string
+  description: string
 }
 
+// eslint-disable-next-line require-jsdoc
 export default class App extends React.Component<unknown, AppState> {
-    private fetchPromise: Promise<LiteratureEntry[]>;
+  // eslint-disable-next-line require-jsdoc
+  constructor(prop: unknown) {
+    super(prop);
 
-    constructor(prop: unknown) {
-        super(prop);
+    this.state = {
+      // @ts-ignore
+      paperList: this.normalizeData(DATA as unknown as LiteratureEntry[]),
+      loading: false,
+      // @ts-ignore
+      title: TITLE as string,
+      // @ts-ignore
+      description: DESCRIPTION as string,
+    };
+  }
 
-        // @ts-ignore
-        this.state = {paperList: [], loading: true, title: TITLE, description: DESCRIPTION}
+  // eslint-disable-next-line require-jsdoc
+  private normalizeData(data: Record<string, unknown>[]): LiteratureEntry[] {
+    return data.map((d, index) => {
+      d['id'] = index.toString();
+      d['date'] = d['date'] ? new Date(d['date'] as string) : null;
+      d['authors'] = (d['authors'] as (string | LiteratureAuthor)[])
+          .map((a) => {
+            if (typeof a === 'string') {
+              return {
+                firstName: '',
+                lastName: a,
+              } as LiteratureAuthor;
+            } else {
+              return a;
+            }
+          });
+      return d;
+    }) as unknown[] as LiteratureEntry[];
+  }
 
-        // load paper list based on settings.yml
-        // @ts-ignore
-        switch (DATA_SOURCE.toLowerCase()) {
-            case "zotero":
-                // @ts-ignore
-                const zType: "user" | "group" = ZOTERO_TYPE.toLowerCase();
-                // @ts-ignore
-                const zId: string = ZOTERO_ID;
-                // @ts-ignore
-                const zApiKey: string = ZOTERO_APIKEY;
-                this.fetchPromise = library2json(zType, zId, zApiKey);
-                break;
-            case "json":
-                // @ts-ignore
-                const json: Record<string, unknown>[] = JSON_DATA;
-                this.fetchPromise = Promise.resolve(json.map((entry, index) => {
-                    return {
-                        id: entry.id ?? index.toString(),
-                        title: entry.title,
-                        type: entry.type ?? null,
-                        authors: (entry.authors as string[]).map(au => {
-                            return {
-                                firstName: "",
-                                lastName: au
-                            }
-                        }),
-                        venue: entry.venue,
-                        venueShort: entry.venueShort ?? entry.venue,
-                        date: new Date((entry.date ?? entry.year ?? Date.now()) as string | number),
-                        tags: entry.tags,
-                        url: entry.url ?? entry.link ?? ""
-                    } as LiteratureEntry
-                }));
-                break;
-            case "bibtex":
-                //@ts-ignore
-                const bibtex: string = BIBTEX_DATA;
-                this.fetchPromise = Promise.resolve(bibtex2entries(bibtex));
-                break;
-            default:
-                this.fetchPromise = Promise.resolve([]);
-        }
+  // eslint-disable-next-line require-jsdoc
+  componentDidMount() {
+    document.title = this.state.title;
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  render() {
+    if (this.state.loading) {
+      return <div>Loading data...</div>;
+    } else {
+      return <Container>
+        <Literatures title={this.state.title}
+          description={this.state.description}
+          entries={this.state.paperList}
+          enableFilter enableSearch enableSort enableScrollTopButton
+        />
+      </Container>;
     }
-
-    componentDidMount() {
-        this.fetchPromise.then(r => this.setState({paperList: r, loading: false}));
-        document.title = this.state.title;
-    }
-
-    render() {
-        if (this.state.loading) {
-            return <div>Loading data...</div>;
-        } else {
-            return <Container>
-                <h1 className="mt-5">{this.state.title}</h1>
-                { this.state.description && <p>{this.state.description}</p>}
-                <hr/>
-                <Literatures entries={this.state.paperList}/>
-            </Container>
-        }
-    }
+  }
 };

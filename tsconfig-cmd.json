@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "module": "commonjs",
+    "strict": true,
+    "target": "es2017",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "webpack"
+    ]
+  },
+  "include": [
+    "./cmd",
+    "webpack.config.ts"
+  ],
+  "exclude": []
+}
