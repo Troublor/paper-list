@@ -38,13 +38,15 @@ export default class BuildCommand extends Command {
   // eslint-disable-next-line require-jsdoc
   async run() {
     const {flags, args} = this.parse(BuildCommand);
-    const compiler = webpack(webpackConfig({
+    process.chdir(path.join(__dirname, '..'));
+    const config = webpackConfig({
       production: true,
       out: flags.out,
       data: args['declaration file or directory'],
       title: flags.title,
       description: flags.description,
-    }));
+    });
+    const compiler = webpack(config);
     const cb = (err, stats) => {
       if (err) throw err;
       if (stats) {
