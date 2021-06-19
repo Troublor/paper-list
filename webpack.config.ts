@@ -55,6 +55,8 @@ const webpackConfig = (env: {
   data?: string,
   publicUrl?: string,
 }): Configuration => {
+  Object.keys(env)
+      .forEach((key) => env[key] === undefined ? delete env[key] : {});
   env = Object.assign({
     production: true,
     development: false,
@@ -114,7 +116,7 @@ const webpackConfig = (env: {
       }),
       new webpack.DefinePlugin({
         'DATA': webpack.DefinePlugin.runtimeValue(
-            ()=>JSON.stringify(loadData(env.data as string)), {
+            () => JSON.stringify(loadData(env.data as string)), {
               fileDependencies: [env.data],
             }),
         'TITLE': JSON.stringify(env.title),
@@ -128,8 +130,9 @@ const webpackConfig = (env: {
       new WatchExternalFilesPlugin({files: [env.data]}),
       new CopyPlugin({
         patterns: [
-          {from: 'public', to: env.out, filter: (resource: string)=>
-            !resource.endsWith('index.html'),
+          {
+            from: 'public', to: env.out, filter: (resource: string) =>
+              !resource.endsWith('index.html'),
           },
         ],
       }),
