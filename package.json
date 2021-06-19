@@ -1,6 +1,6 @@
 {
   "name": "paper-list",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "author": "Wuqi Aaron Zhang @Troublor",
   "bugs": "https://github.com/Troublor/paper-list/issues",
   "dependencies": {
@@ -8,7 +8,6 @@
     "@oclif/config": "^1.17.0",
     "@oclif/errors": "^1.3.4",
     "@oclif/plugin-help": "^3.2.2",
-    "@types/fork-ts-checker-webpack-plugin": "^0.4.5",
     "axios": "^0.21.1",
     "copy-webpack-plugin": "^9.0.0",
     "interpolate-html-plugin": "^4.0.0",
@@ -19,36 +18,29 @@
     "react-paper-list": "^0.4.6",
     "string-similarity": "^4.0.4",
     "tslib": "^1",
-    "webpack-watch-files-plugin": "^1.1.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/plugin-transform-async-to-generator": "^7.13.0",
-    "@babel/plugin-transform-runtime": "^7.14.3",
-    "@babel/preset-env": "^7.14.4",
-    "@babel/preset-react": "^7.13.13",
+    "webpack-watch-files-plugin": "^1.1.0",
     "@types/node": "^10",
     "@types/react": "^17.0.9",
     "@types/react-dom": "^17.0.6",
     "@types/webpack": "^5.28.0",
-    "@types/webpack-dev-server": "^3.11.4",
-    "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
-    "babel-loader": "^8.2.2",
-    "css-loader": "^5.2.6",
-    "eslint": "^7.28.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-plugin-react": "^7.24.0",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "fork-ts-checker-webpack-plugin": "^6.2.10",
     "globby": "^10",
+    "css-loader": "^5.2.6",
+    "fork-ts-checker-webpack-plugin": "^6.2.10",
     "html-webpack-plugin": "^5.3.1",
     "style-loader": "^2.0.0",
     "ts-loader": "^9.2.2",
-    "ts-node": "^8",
     "tsconfig-paths-webpack-plugin": "^3.5.1",
     "typescript": "^3.3",
-    "webpack": "^5.38.1",
+    "webpack": "^5.38.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
+    "@types/webpack-dev-server": "^3.11.4",
+    "eslint": "^7.28.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.24.0",
+    "ts-node": "^8",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"
   },
@@ -57,9 +49,11 @@
   },
   "files": [
     "/bin",
-    "/lib",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/cmd",
+    "/src",
+    "/public",
+    "/tsconfig.json",
+    "/webpack.config.js"
   ],
   "engines": {
     "node": ">=8.0.0"
@@ -70,10 +64,7 @@
   "private": false,
   "repository": "Troublor/paper-list",
   "scripts": {
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "echo NO TESTS",
-    "version": "oclif-dev readme && git add README.md",
+    "prepare": "yarn build:cmd",
     "start:publication": "webpack-cli serve --mode=development --env development --open --hot --config webpack.config.ts",
     "build:publication": "webpack --mode=production --env production --progress --config webpack.config.ts",
     "build:cmd": "tsc --build tsconfig-cmd.json",

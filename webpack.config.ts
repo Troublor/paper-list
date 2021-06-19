@@ -71,6 +71,7 @@ const webpackConfig = (env: {
   }
   return {
     entry: './src/index.tsx',
+    mode: env.production ? 'production' : 'development',
     ...(env.production || !env.development ? {} : {devtool: 'eval-source-map'}),
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
@@ -78,7 +79,7 @@ const webpackConfig = (env: {
       // @ts-ignore
       plugins: [new TsconfigPathsPlugin()],
       alias: {
-        react: path.resolve('./node_modules/react'),
+        // react: path.resolve(path.join(__dirname, './node_modules/react')),
       },
     },
     output: {
@@ -97,7 +98,6 @@ const webpackConfig = (env: {
             /css/,
             /images/,
             /materials/,
-            /node_modules/,
             /scripts/,
           ],
         },
